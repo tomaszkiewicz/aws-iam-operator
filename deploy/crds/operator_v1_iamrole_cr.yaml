@@ -1,0 +1,45 @@
+apiVersion: operator.aws.amazon.com/v1
+kind: IamRole
+metadata:
+  name: example
+spec:
+  attach_policies:
+  - "arn:aws:iam::aws:policy/ReadOnlyAccess"
+  assume_role_policy: |
+    {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Action": "sts:AssumeRole",
+          "Principal": {
+            "Service": [
+              "ec2.amazonaws.com"
+            ]
+          },
+          "Effect": "Allow"
+        }
+      ]
+    }
+  policy: |
+    {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": [
+            "logs:CreateLogGroup",
+            "logs:CreateLogStream",
+            "logs:PutLogEvents",
+            "logs:DescribeLogStreams"
+          ],
+          "Resource": "*"
+        },
+        {
+          "Effect": "Allow",
+          "Action": [
+            "dynamodb:*"
+          ],
+          "Resource": "*"
+        }
+      ]
+    }

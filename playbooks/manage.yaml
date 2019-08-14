@@ -1,0 +1,38 @@
+#!/usr/bin/env ansible-playbook
+---
+- name: Manage IAM role based on custom resource
+  hosts: localhost
+  gather_facts: no
+
+  vars:
+    attach_policies: []
+    prefix: "k8s"
+
+  tasks:
+
+  - name: get the current caller identity facts
+    aws_caller_facts:
+    register: caller_facts
+
+  - name: calculate initial list of policies
+    set_fact:
+      policies: "{{ attach_policies }}"
+
+# TODO add replacing aws account id inside policy
+
+  - name: update managed policy
+    iam_managed_policy:
+      policy_name: "{{ prefix }}-{{ meta.name }}"
+      state: present
+      policy: "{{ policy }}"
+    when: policy is defined
+
+  - name: add managed policy to list of policies
+    set_fact:
+      policies: "{{ policies + [ prefix + '-' + meta.name ] }}"
+
+  - name: update role
+    iam_role:
+      name: "{{ prefix }}-{{ meta.name }}"
+      assume_role_policy_document: "{{ assume_role_policy }}"
+      managed_policy: "{{ policies }}"

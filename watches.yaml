@@ -1,0 +1,8 @@
+---
+- version: v1
+  group: operator.aws.amazon.com
+  kind: IamRole
+  playbook: /opt/ansible/playbooks/manage.yaml
+  finalizer:
+    name: finalizer.operator.aws.amazon.com
+    playbook: /opt/ansible/playbooks/cleanup.yaml

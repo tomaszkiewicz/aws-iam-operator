@@ -1,0 +1,11 @@
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: aws-iam-operator
+subjects:
+- kind: ServiceAccount
+  name: aws-iam-operator
+roleRef:
+  kind: Role
+  name: aws-iam-operator
+  apiGroup: rbac.authorization.k8s.io

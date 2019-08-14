@@ -1,0 +1,19 @@
+#!/usr/bin/env ansible-playbook
+---
+- name: Remove policy
+  hosts: localhost
+
+  vars:
+    prefix: "k8s"
+
+  tasks:
+
+  - name: remove role
+    iam_role:
+      state: absent
+      name: "{{ prefix }}-{{ meta.name }}"
+
+  - name: remove policy
+    iam_managed_policy:
+      state: absent
+      policy_name: "{{ prefix }}-{{ meta.name }}"
